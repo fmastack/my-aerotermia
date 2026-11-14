@@ -1206,8 +1206,12 @@ def handle_admin(args: dict) -> dict:
     if action == "list":
         rows = [_describe(pk, label) for pk, label in index.items()]
         rows.sort(key=lambda r: r["label"])
-        return {"ok": True, "total": len(rows),
-                "used": sum(r["status"] == "used" for r in rows), "codes": rows}
+        total, used = len(rows), sum(r["status"] == "used" for r in rows)
+        wanted = args.get("status")  # optional filter: "used", "unused" or "revoked"
+        if wanted:
+            wanted = {wanted} if isinstance(wanted, str) else set(wanted)
+            rows = [r for r in rows if r["status"] in wanted]
+        return {"ok": True, "total": total, "used": used, "shown": len(rows), "codes": rows}
 
     if action in ("revoke", "restore"):
         pks = _find(index, args)

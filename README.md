@@ -58,6 +58,7 @@ Manage codes from the Lambda console → **Test** tab with an event like:
 ```json
 { "admin": { "action": "create", "labels": ["3º 2ª", "Bajo 1ª"] } }
 { "admin": { "action": "list" } }
+{ "admin": { "action": "list", "status": "used" } }
 { "admin": { "action": "revoke",  "label": "3º 2ª" } }
 { "admin": { "action": "restore", "code": "1234567890" } }
 { "admin": { "action": "reset",   "label": "3º 2ª" } }
