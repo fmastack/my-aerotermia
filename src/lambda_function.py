@@ -565,10 +565,10 @@ async def _handle_for_user(directive, namespace, name, uid, entry) -> dict:
     if namespace == "Alexa.Discovery" and name == "Discover":
         endpoints = []
         for info in await device_infos(entry, force=True):
-            cooling = any(getattr(z, "cool_mode", False) for z in info.zones)
+            # Always expose cooling: Panasonic's capability flags (coolMode,
+            # coolMin/coolMax) are unreliable and hid it on units that can cool.
             label = info.name or info.long_id
-            if cooling:
-                endpoints.append(endpoint_object(info.long_id, "cool", label))
+            endpoints.append(endpoint_object(info.long_id, "cool", label))
             endpoints.append(endpoint_object(info.long_id, "heat", label))
             if info.has_tank:
                 endpoints.append(endpoint_object(info.long_id, "dhw", label))
@@ -595,9 +595,6 @@ async def _handle_for_user(directive, namespace, name, uid, entry) -> dict:
 
     if namespace == "Alexa.PowerController" and name in ("TurnOn", "TurnOff"):
         on = name == "TurnOn"
-        if kind == "cool" and on and not device.support_cooling:
-            return error_response(directive, "NOT_SUPPORTED_IN_CURRENT_MODE",
-                                  "This unit does not support cooling")
         await turn(client, device, kind, on)
         return {
             "event": {"header": header("Alexa", "Response", correlation),

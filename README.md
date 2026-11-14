@@ -12,7 +12,7 @@ not Aquarea heat pumps. This skill fills that gap.
 
 ## What users get
 
-After linking their Panasonic account in the Alexa app, each user gets up to three devices:
+After linking their Panasonic account in the Alexa app, each user gets three devices:
 
 | Alexa device | Turn on | Turn off |
 |---|---|---|
